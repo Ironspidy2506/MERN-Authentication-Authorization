@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 import cookieParser from "cookie-parser";
 import dbConnect from "./config/db.js";
+import authRouter from "./routes/authRoutes.js";
 
 // Initialize Express application
 const app = express();
@@ -24,6 +25,9 @@ app.use(
 app.get("/", (req, res) => {
   res.send("API Working");
 });
+
+// API Endpoints
+app.use('/api/auth', authRouter)
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
