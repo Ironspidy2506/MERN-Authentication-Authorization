@@ -4,6 +4,7 @@ import "dotenv/config";
 import cookieParser from "cookie-parser";
 import dbConnect from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
+import userRouter from "./routes/userRoute.js";
 
 // Initialize Express application
 const app = express();
@@ -27,7 +28,8 @@ app.get("/", (req, res) => {
 });
 
 // API Endpoints
-app.use('/api/auth', authRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
