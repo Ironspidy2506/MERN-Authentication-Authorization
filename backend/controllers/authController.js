@@ -230,4 +230,74 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-export { register, login, logout, sendVerifyOtp, verifyEmail };
+// Check if the user is Authenticated
+const isAuthenticated = async (req, res) => {
+  try {
+    return res.json({
+      success: true,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Send Password Reset OTP
+const sendResetOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.json({
+        success: false,
+        message: "Email is Required",
+      });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "User not registered",
+      });
+    }
+
+    const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+    user.resetOtp = otp;
+    user.resetOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Password Reset OTP",
+      text: `Your Password Reset OTP is ${otp}. Reset you Password using this OTP.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.json({
+      success: true,
+      message: `Password reset OTP sent on ${user.email}`,
+    });
+  } catch (error) {
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export {
+  register,
+  login,
+  logout,
+  sendVerifyOtp,
+  verifyEmail,
+  isAuthenticated,
+  sendResetOtp,
+};
