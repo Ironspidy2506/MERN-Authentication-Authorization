@@ -92,7 +92,7 @@ const login = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "7d",
     });
 
@@ -126,7 +126,6 @@ const logout = async (req, res) => {
 
     return res.json({
       success: true,
-      token,
       message: "User Logged Out successfully",
     });
   } catch (error) {
