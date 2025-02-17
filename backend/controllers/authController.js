@@ -189,7 +189,7 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    const user = await User.findOne(userId);
+    const user = await User.findById(userId);
     if (!user) {
       return res.json({
         success: false,
