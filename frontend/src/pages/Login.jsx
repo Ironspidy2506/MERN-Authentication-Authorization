@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets.js";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext.jsx";
@@ -11,7 +11,8 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setIsLoggedIn, getUserData } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, userData, getUserData } =
+    useContext(AppContext);
 
   const onSubmitHandler = async (e) => {
     try {
@@ -57,6 +58,10 @@ const Login = () => {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    isLoggedIn && userData && navigate("/");
+  }, [isLoggedIn, userData]);
 
   return (
     <div className="flex items-center justify-center min-h-screen px-6 sm:px-0 bg-gradient-to-br from-blue-200 to-purple-400">
